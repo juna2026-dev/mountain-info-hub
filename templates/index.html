@@ -2,10 +2,116 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mountain Info Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
 </head>
 <body>
-    <h1>Mountain Info Hub</h1>
-    <p>{{ message }}</p>
+    <header class="site-header">
+        <h1>Mountain Info Hub</h1>
+    </header>
+
+    <main>
+        <section class="section">
+            <div class="tabs">
+                <button class="tab-button active" data-tab="mountain">山岳ニュース</button>
+                <button class="tab-button" data-tab="trailhead">登山口情報</button>
+                <button class="tab-button" data-tab="hazard">危険情報</button>
+                <button class="tab-button" data-tab="onsen">温泉情報</button>
+                <button class="tab-button" data-tab="it">ITニュース</button>
+            </div>
+
+            <div class="tab-panel active" id="tab-mountain">
+                <ul class="card-list">
+                    {% for article in articles if article.category == "mountain" %}
+                    <li>
+                        <span class="tag source-tag">{{ article.source }}</span>
+                        <a href="{{ article.url }}" target="_blank" rel="noopener noreferrer">{{ article.title }}</a>
+                    </li>
+                    {% else %}
+                    <li>記事がまだありません</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="tab-panel" id="tab-trailhead">
+                <h3>個別データ(住所・駐車場)</h3>
+                <ul class="card-list">
+                    {% for spot in trailhead_spots %}
+                    <li>
+                        <span class="spot-name">{{ spot.name }}</span>
+                        <span class="tag">{{ spot.area }}</span>
+                        <span class="spot-meta">
+                            住所: {{ spot.address }} / 駐車台数: {{ spot.parking_capacity }}
+                            <a href="{{ spot.source_url }}" target="_blank" rel="noopener noreferrer">出典</a>
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <h3>全国の登山口を探す</h3>
+                <ul class="card-list">
+                    {% for site in trailhead_link_sites %}
+                    <li>
+                        <a href="{{ site.url }}" target="_blank" rel="noopener noreferrer">{{ site.name }}</a>
+                        <div class="note">{{ site.note }}</div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="tab-panel danger" id="tab-hazard">
+                <ul class="card-list">
+                    {% for link in danger_links %}
+                    <li>
+                        <span class="tag">{{ link.area }}</span>
+                        <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.name }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="tab-panel" id="tab-onsen">
+                <ul class="card-list">
+                    {% for link in onsen_links %}
+                    <li>
+                        <span class="tag">{{ link.area }}</span>
+                        <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.name }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="tab-panel" id="tab-it">
+                <ul class="card-list">
+                    {% for article in articles if article.category == "it" %}
+                    <li>
+                        <span class="tag source-tag">{{ article.source }}</span>
+                        <a href="{{ article.url }}" target="_blank" rel="noopener noreferrer">{{ article.title }}</a>
+                    </li>
+                    {% else %}
+                    <li>記事がまだありません</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.querySelectorAll('.tab-button').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var target = button.dataset.tab;
+
+                document.querySelectorAll('.tab-button').forEach(function (b) {
+                    b.classList.toggle('active', b === button);
+                });
+                document.querySelectorAll('.tab-panel').forEach(function (panel) {
+                    panel.classList.toggle('active', panel.id === 'tab-' + target);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
