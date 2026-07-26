@@ -1,0 +1,23 @@
+{
+  "name": "Mountain Info Hub",
+  "short_name": "MountainHub",
+  "description": "登山の判断材料を、ひとつの場所に。",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F1F3EE",
+  "theme_color": "#2F4A3B",
+  "icons": [
+    {
+      "src": "/static/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
