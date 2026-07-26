@@ -31,6 +31,7 @@
             </div>
 
             <div class="tab-panel active" id="tab-mountain">
+                <input type="search" class="news-search" data-target="tab-mountain" placeholder="キーワードで検索...">
                 <ul class="card-list">
                     {% for article in articles if article.category == "mountain" %}
                     <li>
@@ -92,6 +93,7 @@
             </div>
 
             <div class="tab-panel" id="tab-it">
+                <input type="search" class="news-search" data-target="tab-it" placeholder="キーワードで検索...">
                 <ul class="card-list">
                     {% for article in articles if article.category == "it" %}
                     <li>
@@ -118,6 +120,19 @@
             var isOpen = tabs.classList.toggle('open');
             hamburger.setAttribute('aria-expanded', isOpen);
             hamburger.classList.toggle('is-active', isOpen);
+        });
+
+        document.querySelectorAll('.news-search').forEach(function (input) {
+            input.addEventListener('input', function () {
+                var keyword = input.value.trim().toLowerCase();
+                var panel = document.getElementById(input.dataset.target);
+                var items = panel.querySelectorAll('.card-list li');
+
+                items.forEach(function (li) {
+                    var text = li.textContent.toLowerCase();
+                    li.style.display = text.includes(keyword) ? '' : 'none';
+                });
+            });
         });
 
         document.querySelectorAll('.tab-button').forEach(function (button) {
