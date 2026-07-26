@@ -53,10 +53,19 @@ def _parse_published_at(entry) -> datetime | None:
 
 def fetch_source(source: RssSource, session: Session, recent_titles: list[str]) -> int:
     """1つのRSSソースを取得し、新規かつ非重複の記事だけをDBに保存する。保存件数を返す。"""
-    parsed = feedparser.parse(source.url)
+    try:
+        response = requests.get(source.url, headers=REQUEST_HEADERS, timeout=10)
+        response.raise_for_status()
+    except requests.RequestException as e:
+        print(f"[warn] failed to request feed: {source.name} ({e})")
+        return 0
+
+    parsed = feedparser.parse(response.content)
 
     if parsed.bozo:
         print(f"[warn] failed to parse feed: {source.name} ({parsed.bozo_exception})")
+        print(f"[debug] status_code={response.status_code}")
+        print(f"[debug] response_snippet={response.text[:300]!r}")
         return 0
 
     saved_count = 0
