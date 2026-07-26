@@ -4,7 +4,16 @@ from difflib import SequenceMatcher
 from time import mktime
 
 import feedparser
+import requests
 from sqlmodel import Session, select
+
+# Googleニュース等がボットとして判定しないよう、一般的なブラウザのUser-Agentを送信する
+REQUEST_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    )
+}
 
 from config import ARTICLE_RETENTION_DAYS, RSS_SOURCES, RssSource
 from database import engine
