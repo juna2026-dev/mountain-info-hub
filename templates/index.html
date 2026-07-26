@@ -15,6 +15,9 @@
 
     <main>
         <section class="section">
+            <button class="hamburger" aria-label="メニューを開く" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
             <div class="tabs">
                 <button class="tab-button active" data-tab="mountain">山岳ニュース</button>
                 <button class="tab-button" data-tab="trailhead">登山口情報</button>
@@ -100,6 +103,15 @@
     </main>
 
     <script>
+        var hamburger = document.querySelector('.hamburger');
+        var tabs = document.querySelector('.tabs');
+
+        hamburger.addEventListener('click', function () {
+            var isOpen = tabs.classList.toggle('open');
+            hamburger.setAttribute('aria-expanded', isOpen);
+            hamburger.classList.toggle('is-active', isOpen);
+        });
+
         document.querySelectorAll('.tab-button').forEach(function (button) {
             button.addEventListener('click', function () {
                 var target = button.dataset.tab;
@@ -110,6 +122,10 @@
                 document.querySelectorAll('.tab-panel').forEach(function (panel) {
                     panel.classList.toggle('active', panel.id === 'tab-' + target);
                 });
+
+                tabs.classList.remove('open');
+                hamburger.setAttribute('aria-expanded', 'false');
+                hamburger.classList.remove('is-active');
             });
         });
     </script>

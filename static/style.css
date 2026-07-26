@@ -202,3 +202,57 @@ ul.card-list {
   .site-header { padding: 2.5rem 1.2rem 2rem; }
   main { padding: 2rem 1.2rem 3rem; }
 }
+
+/* ハンバーガーメニュー(スマホ用) */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--ink);
+  margin: 0 auto;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.hamburger.is-active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.is-active span:nth-child(2) { opacity: 0; }
+.hamburger.is-active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 600px) {
+  .hamburger { display: flex; }
+
+  .tabs {
+    display: none;
+    flex-direction: column;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 1.2rem;
+  }
+
+  .tabs.open { display: flex; }
+
+  .tab-button {
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    padding: 0.8rem 1rem;
+  }
+
+  .tab-button.active {
+    border-bottom-color: var(--line);
+    background: var(--water-bg);
+  }
+}

@@ -1,4 +1,7 @@
+from dotenv import load_dotenv
 from sqlmodel import SQLModel, Session, create_engine
+
+load_dotenv()
 
 from config import DATABASE_URL
 # Article などのモデルを読み込ませることで、
