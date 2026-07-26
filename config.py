@@ -142,3 +142,6 @@ TRAILHEAD_SPOTS: list[TrailheadSpot] = [
         source_url="https://mt-parking-info.azumino-e-tabi.net/detail/mitsumata.php",
     ),
 ]
+
+# この日数より古い記事はDBから自動削除する
+ARTICLE_RETENTION_DAYS = 30

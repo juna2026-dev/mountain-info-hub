@@ -6,7 +6,7 @@ from time import mktime
 import feedparser
 from sqlmodel import Session, select
 
-from config import RSS_SOURCES, RssSource
+from config import ARTICLE_RETENTION_DAYS, RSS_SOURCES, RssSource
 from database import engine
 from models import Article
 
@@ -79,6 +79,19 @@ def fetch_source(source: RssSource, session: Session, recent_titles: list[str]) 
     return saved_count
 
 
+def cleanup_old_articles() -> int:
+    """保持期間(ARTICLE_RETENTION_DAYS)より古い記事をDBから削除する。削除件数を返す。"""
+    with Session(engine) as session:
+        cutoff = datetime.now(timezone.utc) - timedelta(days=ARTICLE_RETENTION_DAYS)
+        old_articles = session.exec(
+            select(Article).where(Article.fetched_at < cutoff)
+        ).all()
+        for article in old_articles:
+            session.delete(article)
+        session.commit()
+        return len(old_articles)
+
+
 def fetch_all_sources() -> None:
     """全RSSソースを取得してDBに保存する(重複タイトルは除外)。"""
     with Session(engine) as session:
@@ -95,3 +108,6 @@ def fetch_all_sources() -> None:
             total += count
             print(f"[info] {source.name}: {count} new articles")
         print(f"[info] total new articles: {total}")
+
+    deleted_count = cleanup_old_articles()
+    print(f"[info] deleted {deleted_count} old articles (older than {ARTICLE_RETENTION_DAYS} days)")
