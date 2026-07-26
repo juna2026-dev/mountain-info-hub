@@ -77,23 +77,22 @@ ONSEN_LINKS: list[OnsenLink] = [
     ),
 ]
 
-import os
-from urllib.parse import quote_plus
+# MySQLへの移行を検証した際の接続設定(学習用に残置、現在は未使用)
+# import os
+# from urllib.parse import quote_plus
+# MYSQL_USER = quote_plus(os.environ.get("MYSQL_USER", "app_user"))
+# MYSQL_PASSWORD = quote_plus(os.environ.get("MYSQL_PASSWORD", ""))
+# MYSQL_DATABASE = os.environ.get("MYSQL_DATABASE", "mountain_info_hub")
+# MYSQL_HOST = os.environ.get("MYSQL_HOST", "127.0.0.1")
+# MYSQL_PORT = os.environ.get("MYSQL_PORT", "3307")
+# DATABASE_URL = (
+#     f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}"
+#     f"@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
+# )
 
-from dotenv import load_dotenv
-
-load_dotenv()
-
-MYSQL_USER = quote_plus(os.environ.get("MYSQL_USER", "app_user"))
-MYSQL_PASSWORD = quote_plus(os.environ.get("MYSQL_PASSWORD", ""))
-MYSQL_DATABASE = os.environ.get("MYSQL_DATABASE", "mountain_info_hub")
-MYSQL_HOST = os.environ.get("MYSQL_HOST", "127.0.0.1")
-MYSQL_PORT = os.environ.get("MYSQL_PORT", "3307")
-
-DATABASE_URL = (
-    f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}"
-    f"@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
-)
+# Render無料枠でのデプロイに合わせ、SQLiteに戻す
+# (無料枠はディスクが非永続のため、記事データは消えても再取得される前提で運用する)
+DATABASE_URL = "sqlite:///./data/app.db"
 FETCH_INTERVAL_MINUTES = 30
 
 

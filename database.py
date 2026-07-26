@@ -8,6 +8,10 @@ from config import DATABASE_URL
 # SQLModel.metadata にテーブル定義を登録する(副作用目的のimport)
 import models  # noqa: F401
 
+import os
+
+os.makedirs("data", exist_ok=True)
+
 engine = create_engine(DATABASE_URL, echo=False)
 
 
