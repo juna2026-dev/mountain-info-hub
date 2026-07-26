@@ -33,14 +33,26 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 @app.get("/")
 def read_root(request: Request, username: str = Depends(verify_credentials)):
     with Session(engine) as session:
-        articles = session.exec(
+        # カテゴリごとに別々に上位を取得し、片方の更新頻度に埋もれないようにする
+        mountain_articles = session.exec(
             select(Article)
+            .where(Article.category == "mountain")
             .order_by(
                 Article.published_at.is_(None),
                 Article.published_at.desc(),
             )
             .limit(100)
         ).all()
+        it_articles = session.exec(
+            select(Article)
+            .where(Article.category == "it")
+            .order_by(
+                Article.published_at.is_(None),
+                Article.published_at.desc(),
+            )
+            .limit(100)
+        ).all()
+        articles = list(mountain_articles) + list(it_articles)
 
     return templates.TemplateResponse(
         request=request,
