@@ -1,6 +1,7 @@
 import re
 from datetime import datetime, timedelta, timezone
 from difflib import SequenceMatcher
+import time
 from time import mktime
 
 import feedparser
@@ -53,11 +54,20 @@ def _parse_published_at(entry) -> datetime | None:
 
 def fetch_source(source: RssSource, session: Session, recent_titles: list[str]) -> int:
     """1つのRSSソースを取得し、新規かつ非重複の記事だけをDBに保存する。保存件数を返す。"""
-    try:
-        response = requests.get(source.url, headers=REQUEST_HEADERS, timeout=10)
-        response.raise_for_status()
-    except requests.RequestException as e:
-        print(f"[warn] failed to request feed: {source.name} ({e})")
+    response = None
+    last_error = None
+    for attempt in range(3):
+        try:
+            response = requests.get(source.url, headers=REQUEST_HEADERS, timeout=10)
+            response.raise_for_status()
+            break
+        except requests.RequestException as e:
+            last_error = e
+            response = None
+            time.sleep(2 * (attempt + 1))  # 2秒, 4秒, 6秒と間隔を空けて再試行
+
+    if response is None:
+        print(f"[warn] failed to request feed after retries: {source.name} ({last_error})")
         return 0
 
     parsed = feedparser.parse(response.content)

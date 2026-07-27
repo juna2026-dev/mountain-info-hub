@@ -27,7 +27,6 @@
                 <button class="tab-button" data-tab="trailhead">登山口情報</button>
                 <button class="tab-button" data-tab="hazard">危険情報</button>
                 <button class="tab-button" data-tab="onsen">温泉情報</button>
-                <button class="tab-button" data-tab="it">ITニュース</button>
             </div>
 
             <div class="tab-panel active" id="tab-mountain">
@@ -92,19 +91,6 @@
                 </ul>
             </div>
 
-            <div class="tab-panel" id="tab-it">
-                <input type="search" class="news-search" data-target="tab-it" placeholder="キーワードで検索...">
-                <ul class="card-list">
-                    {% for article in articles if article.category == "it" %}
-                    <li>
-                        <span class="tag source-tag">{{ article.source }}</span>
-                        <a href="{{ article.url }}" target="_blank" rel="noopener noreferrer">{{ article.title }}</a>
-                    </li>
-                    {% else %}
-                    <li>記事がまだありません</li>
-                    {% endfor %}
-                </ul>
-            </div>
         </section>
     </main>
 

@@ -43,16 +43,7 @@ def read_root(request: Request, username: str = Depends(verify_credentials)):
             )
             .limit(100)
         ).all()
-        it_articles = session.exec(
-            select(Article)
-            .where(Article.category == "it")
-            .order_by(
-                Article.published_at.is_(None),
-                Article.published_at.desc(),
-            )
-            .limit(100)
-        ).all()
-        articles = list(mountain_articles) + list(it_articles)
+        articles = list(mountain_articles)
 
     return templates.TemplateResponse(
         request=request,

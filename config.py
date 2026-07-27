@@ -9,17 +9,6 @@ class RssSource:
 
 
 RSS_SOURCES: list[RssSource] = [
-    RssSource(name="Zenn", url="https://zenn.dev/feed", category="it"),
-    RssSource(
-        name="Qiita",
-        url="https://qiita.com/popular-items/feed.atom",
-        category="it",
-    ),
-    RssSource(
-        name="はてなブックマーク",
-        url="https://b.hatena.ne.jp/hotentry/it.rss",
-        category="it",
-    ),
     RssSource(
         name="Googleニュース(登山)",
         url="https://news.google.com/rss/search?q=%E7%99%BB%E5%B1%B1&hl=ja&gl=JP&ceid=JP:ja",
